@@ -966,7 +966,7 @@ ntfp_totals <- function(tree_aid_df,
 
         off_farm_prop[off_farm_incomes_any=="n"] <- 0
 
-        indicator_df$off_farm_income_given_ntfp_lcu <- (off_farm_prop[[1]] * (indicator_df$total_farm_income + indicator_df$ntfp_income)) / (1 - off_farm_prop[[1]])
+        indicator_df$off_farm_income_given_ntfp_lcu <- (off_farm_prop * (indicator_df$total_farm_income + indicator_df$ntfp_income)) / (1 - off_farm_prop)
 
         return(indicator_df)
     }
