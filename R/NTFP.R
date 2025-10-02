@@ -952,6 +952,8 @@ ntfp_totals <- function(tree_aid_df,
         indicator_df$value_ntfp_consumed <- total_ntfp_value
         indicator_df$ntfp_consumed_calories_kcal_per_hh_per_year <- total_ntfp_calories
 
+        indicator_df$off_farm_income_given_ntfp_lcu <- (tree_aid_df$offfarm_income_proportion * (indicator_df$total_farm_income + indicator_df$ntfp_income)) / (1 - tree_aid_df$offfarm_income_proportion)
+
         return(indicator_df)
     }
 
