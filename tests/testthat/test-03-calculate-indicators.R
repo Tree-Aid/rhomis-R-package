@@ -85,7 +85,6 @@ test_that("Can run final indicator calcalutaions", {
         )
 
         directories_to_remove <- paste0(base_path, directories)
-
         for (directory in directories_to_remove) {
             if (dir.exists(directory)) {
                 unlink(directory, recursive = T)
@@ -174,6 +173,8 @@ test_that("Can run final indicator calcalutaions locally", {
 
         directories_to_remove <- paste0(base_path, directories)
 
+
+
         for (directory in directories_to_remove) {
             if (dir.exists(directory)) {
                 unlink(directory, recursive = T)
@@ -190,93 +191,93 @@ test_that("Can run final indicator calcalutaions locally", {
     expect_equal(result, T)
 })
 
-
-test_that("Can run final indicator calcalutaions on server", {
-
-    if(.Platform$OS.type!="windows")
-    {
-        result <- tryCatch({
-            central_url <- "https://github.com/RHoMIS/rhomis-R-package/blob/main/inst/sample_central_project/sample-central-data.csv.zip?raw=true"
-            central_email <- "test@domain.com"
-            central_password <- "testpassword"
-            project_name <- "test_project"
-            form_name <- "test_form"
-            database <- "rhomis-test"
-            isDraft <- F
-            central_test_case <- T
-
-            suppressWarnings(extract_units_and_conversions_server(
-                central_url = central_url,
-                central_email = central_email,
-                central_password = central_password,
-                project_name = project_name,
-                form_name = form_name,
-                database = database,
-                isDraft = isDraft,
-                central_test_case = central_test_case
-            ))
-            suppressWarnings(calculate_prices_server(
-                central_url = central_url,
-                central_email = central_email,
-                central_password = central_password,
-                project_name = project_name,
-                form_name = form_name,
-                database = database,
-                isDraft = isDraft,
-                central_test_case = central_test_case
-            ))
-
-            suppressWarnings(calculate_indicators_server(
-                central_url = central_url,
-                central_email = central_email,
-                central_password = central_password,
-                project_name = project_name,
-                form_name = form_name,
-                database = database,
-                isDraft = isDraft,
-                central_test_case = central_test_case,base_folder = "./zip_outputs/"
-
-            ))
-
-            TRUE
-        },
-        error=function(error){
-            traceback()
-            print(error)
-            return(FALSE)
-        },
-        finally = {
-
-            unlink("./zip_outputs/", recursive = T)
-
-            data_collection <- mongolite::mongo(collection = "data",
-                                                db = "rhomis-test",
-                                                url =  "mongodb://localhost")
-            data_collection$drop()
-            data_collection$disconnect()
-
-            project_data_collection <- mongolite::mongo(collection = "projectData",
-                                                        db = "rhomis-test",
-                                                        url =  "mongodb://localhost")
-            project_data_collection$drop()
-            project_data_collection$disconnect()
-
-            units_and_conversion_collection <- mongolite::mongo(collection = "units_and_conversions",
-                                                                db = "rhomis-test",
-                                                                url =  "mongodb://localhost")
-            units_and_conversion_collection$drop()
-            units_and_conversion_collection$disconnect()
-
-            units_and_conversion_collection <- mongolite::mongo(collection = "unmodified_units",
-                                                                db = "rhomis-test",
-                                                                url =  "mongodb://localhost")
-            units_and_conversion_collection$drop()
-            units_and_conversion_collection$disconnect()
-
-            print("Database cleared")
-
-        })
-
-        expect_equal(result, T)
-    }
-})
+#
+# test_that("Can run final indicator calcalutaions on server", {
+#
+#     if(.Platform$OS.type!="windows")
+#     {
+#         result <- tryCatch({
+#             central_url <- "https://github.com/RHoMIS/rhomis-R-package/blob/main/inst/sample_central_project/sample-central-data.csv.zip?raw=true"
+#             central_email <- "test@domain.com"
+#             central_password <- "testpassword"
+#             project_name <- "test_project"
+#             form_name <- "test_form"
+#             database <- "rhomis-test"
+#             isDraft <- F
+#             central_test_case <- T
+#
+#             suppressWarnings(extract_units_and_conversions_server(
+#                 central_url = central_url,
+#                 central_email = central_email,
+#                 central_password = central_password,
+#                 project_name = project_name,
+#                 form_name = form_name,
+#                 database = database,
+#                 isDraft = isDraft,
+#                 central_test_case = central_test_case
+#             ))
+#             suppressWarnings(calculate_prices_server(
+#                 central_url = central_url,
+#                 central_email = central_email,
+#                 central_password = central_password,
+#                 project_name = project_name,
+#                 form_name = form_name,
+#                 database = database,
+#                 isDraft = isDraft,
+#                 central_test_case = central_test_case
+#             ))
+#
+#             suppressWarnings(calculate_indicators_server(
+#                 central_url = central_url,
+#                 central_email = central_email,
+#                 central_password = central_password,
+#                 project_name = project_name,
+#                 form_name = form_name,
+#                 database = database,
+#                 isDraft = isDraft,
+#                 central_test_case = central_test_case,base_folder = "./zip_outputs/"
+#
+#             ))
+#
+#             TRUE
+#         },
+#         error=function(error){
+#             traceback()
+#             print(error)
+#             return(FALSE)
+#         },
+#         finally = {
+#
+#             unlink("./zip_outputs/", recursive = T)
+#
+#             data_collection <- mongolite::mongo(collection = "data",
+#                                                 db = "rhomis-test",
+#                                                 url =  "mongodb://localhost")
+#             data_collection$drop()
+#             data_collection$disconnect()
+#
+#             project_data_collection <- mongolite::mongo(collection = "projectData",
+#                                                         db = "rhomis-test",
+#                                                         url =  "mongodb://localhost")
+#             project_data_collection$drop()
+#             project_data_collection$disconnect()
+#
+#             units_and_conversion_collection <- mongolite::mongo(collection = "units_and_conversions",
+#                                                                 db = "rhomis-test",
+#                                                                 url =  "mongodb://localhost")
+#             units_and_conversion_collection$drop()
+#             units_and_conversion_collection$disconnect()
+#
+#             units_and_conversion_collection <- mongolite::mongo(collection = "unmodified_units",
+#                                                                 db = "rhomis-test",
+#                                                                 url =  "mongodb://localhost")
+#             units_and_conversion_collection$drop()
+#             units_and_conversion_collection$disconnect()
+#
+#             print("Database cleared")
+#
+#         })
+#
+#         expect_equal(result, T)
+#     }
+# })

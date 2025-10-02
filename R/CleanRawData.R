@@ -418,6 +418,7 @@ write_list_of_df_to_folder <- function(list_of_df, folder, converted_values=F) {
     folder_name <-  folder
     dir.create(folder_name, showWarnings = F)
 
+
     sapply(names(list_of_df), function(x) {
         file_path <- paste0(folder_name, "/", x, ".csv")
         data_to_write <- list_of_df[[x]]
@@ -479,7 +480,7 @@ write_list_of_df_to_folder <- function(list_of_df, folder, converted_values=F) {
         if (class(data_to_write) == "list") {
             new_folder <- paste0(folder_name, "/", x)
             if(length(data_to_write)>0){
-                names(data_to_write) <- paste0(x, "_", names(data_to_write))
+                # names(data_to_write) <- paste0(x, "_", names(data_to_write))
                 write_list_of_df_to_folder(data_to_write, new_folder)
             }
             return()
