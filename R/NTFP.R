@@ -973,6 +973,11 @@ ntfp_totals <- function(tree_aid_df,
 
         indicator_df$off_farm_income_given_ntfp_lcu <- (off_farm_prop * (crop_inc_no_na + livestock_inc_no_na  + ntfp_inc_no_na)) / (1 - off_farm_prop)
 
+        indicator_df$off_farm_income_given_ntfp_lcu[is.na(indicator_df$crop_income_lcu_per_year) &
+                                                    is.na(indicator_df$livestock_income_lcu_per_year) &
+                                                    is.na(indicator_df$ntfp_income)] <- NA
+
+
         return(indicator_df)
     }
 
