@@ -952,7 +952,21 @@ ntfp_totals <- function(tree_aid_df,
         indicator_df$value_ntfp_consumed <- total_ntfp_value
         indicator_df$ntfp_consumed_calories_kcal_per_hh_per_year <- total_ntfp_calories
 
-        indicator_df$off_farm_income_given_ntfp_lcu <- (tree_aid_df$offfarm_income_proportion * (indicator_df$total_farm_income + indicator_df$ntfp_income)) / (1 - tree_aid_df$offfarm_income_proportion)
+
+        unit_conv_tibble <- proportion_conversions
+        unit_conv_tibble$id_rhomis_dataset <- "x"
+
+        id_vector <- rep("x", nrow(tree_aid_df))
+
+        # indicator_search_off_farm_income_lcu_per_year
+
+        off_farm_prop <- tree_aid_df$offfarm_income_proportion
+        off_farm_incomes_any <- tree_aid_df$offfarm_incomes_any
+        off_farm_prop <- switch_units(off_farm_prop, unit_tibble = unit_conv_tibble, id_vector = id_vector)
+
+        off_farm_prop[off_farm_incomes_any=="n"] <- 0
+
+        indicator_df$off_farm_income_given_ntfp_lcu <- (off_farm_prop[[1]] * (indicator_df$total_farm_income + indicator_df$ntfp_income)) / (1 - off_farm_prop[[1]])
 
         return(indicator_df)
     }
